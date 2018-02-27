@@ -1,0 +1,17 @@
+[Unit]
+Description=Swat startup hook
+Before=network.target
+After=dbus.service
+Before=wpa_supplicant.service
+Wants=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/swat/scripts/swat_set_ip.sh 
+ExecStart=/home/swat/scripts/swat_set_router.sh 
+ExecStart=/home/swat/scripts/swat_set_email.sh
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target
+Alias=swat.service
