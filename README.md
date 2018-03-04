@@ -1,7 +1,7 @@
-# spycam README.md
-
-# features
-
+# SpyCam README.md
+--------------------------------------------------
+# Features
+--------------------------------------------------
 •	Easy installation. One script does all the work. One configuration file contains all the various settings found in the installed software configuration files. Personalize your setup in a single configuration file and have it update the other configuration files.
 
 •	Built in motion detection can send you emails and video attachment of intruder when the motion detection is triggered. 
@@ -13,8 +13,10 @@
 •	Optional External USB storage is automatically formatted, mounted and used to hold your historical videos captured by SpyCam.
 
 •	Local Video Storage manages its own capacity and grooms off the oldest video when local space starts to fill up the SD card.
-
+#
+--------------------------------------------------
 # Quick Installation
+--------------------------------------------------
 (see Installation PDF for details)
 
 1. Download solution and extract spycam_scripts.tar.
