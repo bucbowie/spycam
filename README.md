@@ -1,4 +1,4 @@
-# SpyCam README.md
+# README.md
 --------------------------------------------------
 # Features
 --------------------------------------------------
@@ -17,7 +17,7 @@
 --------------------------------------------------
 # Quick Installation
 --------------------------------------------------
-(see Installation PDF for details)
+(see RPi_Zero_SpyCam.pdf for details)
 
 1. Download solution and extract spycam_scripts.tar.
 2. Copy spycam_scripts.tar to your Raspberry Pi. Install spycam_scripts.tar in the HOME directory of any user with SUDO privilege. Generally, the pi user has SUDO.
