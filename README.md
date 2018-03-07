@@ -6,9 +6,11 @@
 
 •	Built in motion detection can send you emails and video attachment of intruder when the motion detection is triggered. 
 
-•	Installs proven software from credible vendors. This solution installs the RPi Cam as taken from https://elinux.org/RPi-Cam-Web-Interface. It also updates V4L2 binaries and takes care of loading and installing any dependencies.
+•	This solution applies updates/upgrades to the software distribution and installs the RPi Cam as taken from https://elinux.org/RPi-Cam-Web-Interface. It also updates V4L2 binaries and takes care of loading and installing any dependencies.
 
 •	Optional IOT baked in. SpyCam turns off when it detects your presence. Turns back on when you leave.
+
+•	Automagical static IP assignment for wireless network adapter (wlan0). Get email with RPi's wireless adapter new IP.
 
 •	Optional External USB storage is automatically formatted, mounted and used to hold your historical videos captured by SpyCam.
 
@@ -21,9 +23,9 @@
 
 1. Download solution and extract spycam_scripts.tar.
 2. Copy spycam_scripts.tar to your Raspberry Pi. Install spycam_scripts.tar in the HOME directory of any user with SUDO privilege. Generally, the pi user has SUDO.
-3. Untar (Extract) spycam_scripts.tar. Change directory to ./scripts/boot.
+3. Untar (Extract) spycam_scripts.tar. Change directory to ./swat_scripts/boot.
 4. Edit the swat.config to personalize your installation. See the PDF for details.
 5. Attach an empty USB storage device if you want secondary storage to keep all your video recordings. 
 6. Finally, change directory back to $HOME, where the install.sh script is located.
 7. To install solution: sudo ./install.sh 
-8. Go for coffee and return in 30 minutes. Open web browser to http://your-pi-I.P/cam and see the video camera. If you set up the configurations correctly from Step 4, then the camera will turn off in 1 minute. If you want to test your camera, simply turn off the wireless function on your cell phone and wait 4 minutes. The camera should go live after not seeing your cell phone. When you reenable the wireless function on your cell phone, within a minute the camera should stop capturing video.
+8. Go for coffee and return in 44 minutes. Open web browser to http://your-pi-I.P/cam and see the video camera. If you set up the configurations correctly from Step 4, then the camera will turn off in 1 minute. If you want to test your camera, simply turn off the wireless function on your cell phone and wait 4 minutes. The camera should go live after not seeing your cell phone. When you reenable the wireless function on your cell phone, within a minute the camera should stop capturing video.
