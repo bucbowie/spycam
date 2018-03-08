@@ -15,6 +15,8 @@
 •	Optional External USB storage is automatically formatted, mounted and used to hold your historical videos captured by SpyCam.
 
 •	Local Video Storage manages its own capacity and grooms off the oldest video when local space starts to fill up the SD card.
+
+•	Firewall restricts incoming to ports 22 (ssh) and 80 (web display). Not secure, but easier to monitor network traffic as server does not respond to ping, telnet. etc.
 #
 --------------------------------------------------
 # Quick Installation
