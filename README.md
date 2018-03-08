@@ -16,6 +16,8 @@
 
 •	Local Video Storage manages its own capacity and grooms off the oldest video when local space starts to fill up the SD card.
 
+•	Email uses encrypted communication to authenticate. 
+
 #
 --------------------------------------------------
 # Quick Installation
