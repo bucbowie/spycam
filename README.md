@@ -1,4 +1,5 @@
 # README.md
+# Updated for PiOS - Raspberry Pi 3B+ and Raspberry Pi 4B
 --------------------------------------------------
 # Features
 --------------------------------------------------
