@@ -15,7 +15,7 @@ myPREV_STATE=/tmp/${mySCRIPT}.prev_state
 myCURR_STATE=/tmp/${mySCRIPT}.curr_state
 MSG_ABSENT="ABSENT"
 MSG_PRESENT="PRESENT"
-if [[ -z `which arp-scan` ]];then
+if [[ -z `sudo which arp-scan` ]];then
    {
      echo "************************************"
      echo "* ${mySCRIPT}  requires arp-scan to be installed".
