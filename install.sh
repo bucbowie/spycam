@@ -573,14 +573,14 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
          fi
    }
  fi
-# echo "#--------------------------------------------#"
-# echo "# Clean up and reboot.                        "
-# echo "#--------------------------------------------#"
+ echo "#--------------------------------------------#"
+ echo "# Clean up and reboot.                        "
+ echo "#--------------------------------------------#"
 # echo "sudo rm -rf ${MY_HOME}/${SCRIPT_DIR} ${MY_HOME}/swat_install ${MY_HOME}/install.sh /home/${MY_USER}/swat_install /home/${MY_USER}/install.sh &"
 # sudo rm -rf "${MY_HOME}"/"${SCRIPT_DIR}" "${MY_HOME}"/swat_install "${MY_HOME}"/install.sh /home/"${MY_USER}"/swat_install /home/"${MY_USER}"/install.sh &
-# echo "###############################################"
-# echo "# COMPLETED Install and Clean up. Recapping   #"
-# echo "# SSL CA and CERT builds:                     #"
-# echo "# See /var/log/swat.log for details on SSL    #"
-# echo "###############################################"
-#sudo systemctl reboot
+ echo "###############################################"
+ echo "# COMPLETED Install and Clean up. Recapping   #"
+ echo "# SSL CA and CERT builds:                     #"
+ echo "# See /var/log/swat.log for details on SSL    #"
+ echo "###############################################"
+sudo systemctl reboot
