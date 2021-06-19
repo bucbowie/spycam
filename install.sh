@@ -445,7 +445,7 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
  sed -i 's/webserver=\\"apache\\"/webserver=\\"nginx\\"/' ./install.sh
  sed -i 's/read -r rpicamdir/rpicamdir="cam"/' ./install.sh
  sed -i 's/read -r autostart/autostart=no/g' ./install.sh
- sed -i 's/response=$?/response=0/' ./install.sh #Askew20210608 - chg from 1 to 0
+# sed -i 's/response=$?/response=0/' ./install.sh #Askew20210608 - chg from 1 to 0
  echo "chmod u+x /var/www/cam/macros/*.sh" >> ./install.sh
  echo "#--------------------------------------------#"
  echo "# Silent install RPi_Cam_Web_Interface        "
@@ -502,23 +502,23 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
  sudo echo -e "host\t\tsmtp.gmail.com" >> /etc/msmtprc
  sudo echo -e "port\t\t587" >> /etc/msmtprc
  sudo echo -e "from\t\t${MY_EMAIL_ADDRESS}" >> /etc/msmtprc
- sudo echo -e"user\t\t${MY_EMAIL_ADDRESS}" >> /etc/msmtprc
+ sudo echo -e "user\t\t${MY_EMAIL_ADDRESS}" >> /etc/msmtprc
  sudo echo -e "password\t\t${MY_EMAIL_PW}"  >> /etc/msmtprc
  sudo echo -e "syslog\t\tLOG_MAIL" >> /etc/msmtprc
  sudo chown root:msmtp  /etc/msmtprc
  sudo chmod 660 /etc/msmtprc
  
- echo "#--------------------------------------------#"
- echo "# Enabling motion - change /etc/default/motion"
- echo "#--------------------------------------------#"
- sudo sed -i 's/start_motion_daemon=no/start_motion_daemon=yes/g' /etc/default/motion
+ #echo "#--------------------------------------------#"
+ #echo "# Enabling motion - change /etc/default/motion"
+ #echo "#--------------------------------------------#"
+ #sudo sed -i 's/start_motion_daemon=no/start_motion_daemon=yes/g' /etc/default/motion
 
 
  echo "#--------------------------------------------#"
  echo "# Setting /etc/raspimjpeg                    #"
  echo "#--------------------------------------------#"
  [[ ! -z "${MY_CAMERA_NAME}" ]] && { sudo sed -i 's/annotation RPi Cam/annotation '${MY_CAMERA_NAME}'/' /etc/raspimjpeg;  } 
- sudo sed -i 's/rotation 0/rotation 90/' /etc/raspimjpeg
+ sudo sed -i 's/rotation 0/rotation 270/' /etc/raspimjpeg
  sudo sed -i 's/motion_detection false/motion_detection true/' /etc/raspimjpeg
  [[ ! -z "${MY_CAMERA_NAME}" ]] && { sudo sed -i 's/mycam/'${MY_CAMERA_NAME}'/' /opt/src/RPi_Cam_Web_Interface/www/config.php; }
  if [[ -f /etc/apache2/apache.conf ]]; then
