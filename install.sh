@@ -444,6 +444,7 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
  sed -i 's/rpicamdir=\\"html\\"/rpicamdir=\\"cam\\"/' ./install.sh
  sed -i 's/webserver=\\"apache\\"/webserver=\\"nginx\\"/' ./install.sh
  sed -i 's/read -r rpicamdir/rpicamdir="cam"/' ./install.sh
+ sed -i 's/read -r autostart/autostart=no/g' ./install.sh
  sed -i 's/response=$?/response=0/' ./install.sh #Askew20210608 - chg from 1 to 0
  echo "chmod u+x /var/www/cam/macros/*.sh" >> ./install.sh
  echo "#--------------------------------------------#"
