@@ -75,6 +75,7 @@ set -a
      exit -1
    }
  fi
+ sudo apt-get install -y dos2unix
 
  sudo apt-get install -y arp-scan
  }
@@ -84,7 +85,7 @@ set -a
  if [[ `sudo mount|grep '/media/cam'|grep vfat|wc -l` -gt 0 ]];then
    {
 	     echo "#####################################"
-	     echo "# install.sh sees /media/cam already "
+	     echo "# ${MY_SCRIPT} sees /media/cam already "
 	     echo "# mounted. Skip format USB with no   "
 	     echo "# action taken on USB or /media/cam. "
 	     echo "# ...Processing continues...         "
@@ -95,7 +96,7 @@ set -a
  if [[ `df -k|grep '/media/cam'|wc -l` -gt 0 ]];then
    {
 	     echo "#####################################"
-	     echo "# install.sh sees /media/cam already "
+	     echo "# ${MY_SCRIPT} sees /media/cam already "
 	     echo "# mounted. Skip format USB with no   "
 	     echo "# action taken on USB or /media/cam. "
 	     echo "# ...Processing continues...         "
@@ -104,24 +105,20 @@ set -a
    }
  fi
 
- if [[ -L /sys/block/sda ]];then
+ if [[ -d /sys/block/sda ]];then
    {
-    echo "#####################################"
-    echo "# USB build: /sys/block/sda is found"
-    echo "#####################################"
-    [[ ! -d /media/cam ]] && { sudo mkdir -p /media/cam; sudo chmod 777 /media/cam; }
-    if [[ -e "${SCRIPT_DIR}"/swat_format_usb.sh ]];then
+    [[ ! -d /media/cam ]] && { sudo mkdir /media/cam; sudo chmod 777 /media/cam; }
+    if [[ -x ./swat_format_usb.sh ]];then
        {
-          echo "#####################################"
-	  echo "#USB build: running swat_format_usb.sh"
-          echo "#####################################"
-	  sudo "${SCRIPT_DIR}"/swat_format_usb.sh
+	  sudo ./swat_format_usb.sh
 	  myRC=$?
 	  if [[ ${myRC} -eq 0 ]];then
 	     {
 	       sudo cp /etc/fstab /etc/fstab.pristine
-	       echo "/dev/sda1 /media/cam vfat defaults,noatime,nofail,rw 0 0" | sudo tee -a /etc/fstab
+	       sudo echo "/dev/sda1 /media/cam vfat defaults,noatime,nofail,rw 0 0" >> /etc/fstab
 	       sudo umount -l /media/cam
+	       sleep 5
+	       sudo mount 
 	       sleep 2
 	    }
 	 fi
@@ -132,7 +129,7 @@ set -a
 	     sudo mv /etc/fstab.pristine /etc/fstab
 	     sudo rm -rf /media/cam
 	     echo "#####################################"
-	     echo "# install.sh unable to mount         "
+	     echo "# ${MY_SCRIPT} unable to mount         "
 	     echo "# external drive. Mount returned: ${myRC}"
 	     echo "# Suggest command: dmesg|grep sd     "
 	     echo "# and look for the mount messages    "
@@ -153,7 +150,7 @@ set -a
  if [[ ! -d ./swat_install ]]; then
    {
      echo "#####################################"
-     echo "# install.sh running function        "
+     echo "# ${MY_SCRIPT} running function      "
      echo "# swat_get_user_swat failed.         "
      echo "# Aborting.                          "
      echo "# Directory ./swat_install not found."
@@ -167,7 +164,7 @@ set -a
  if [[ ! -x ./swat_get_user_swat.sh ]]; then
    {
      echo "#####################################"
-     echo "# install.sh running function        "
+     echo "# ${MY_SCRIPT} running function      "
      echo "# swat_get_user_swat failed.         "
      echo "# Aborting.                          "
      echo "# Script swat_get_user_swat.sh not found."
@@ -180,7 +177,7 @@ set -a
  if [[ ${myRC} -ne 0 ]];then
    {
      echo "#####################################"
-     echo "# install.sh running function        "
+     echo "# ${MY_SCRIPT} running function      "
      echo "# swat_get_user_swat failed.         "
      echo "# Aborting.                          "
      echo "# Script swat_get_user_swat.sh failed"
@@ -197,7 +194,7 @@ set -a
  if [[ ! -d ./swat_install ]]; then
    {
      echo "#####################################"
-     echo "# install.sh running function        "
+     echo "# ${MY_SCRIPT} running function      "
      echo "# swat_get_user_swat failed.         "
      echo "# Aborting.                          "
      echo "# Directory ./swat_install not found."
@@ -210,8 +207,8 @@ set -a
  if [[ ! -x ./swat_set_dir_swat.sh ]]; then
    {
      echo "#####################################"
-     echo "# install.sh running function        "
-     echo "# swat_set_dir_swat failed.         "
+     echo "# ${MY_SCRIPT} running function      "
+     echo "# swat_set_dir_swat failed.          "
      echo "# Aborting.                          "
      echo "# Script swat_set_dir_swat.sh not found."
      echo "#####################################"
@@ -223,10 +220,10 @@ set -a
  if [[ ${myRC} -ne 0 ]];then
    {
      echo "#####################################"
-     echo "# install.sh running function        "
-     echo "# swat_set_dir_swat failed.         "
+     echo "# ${MY_SCRIPT} running function      "
+     echo "# swat_set_dir_swat failed.          "
      echo "# Aborting.                          "
-     echo "# Script swat_set_dir_swat.sh failed"
+     echo "# Script swat_set_dir_swat.sh failed "
      echo "# to create dirctory /home/swat/${SCRIPT_DIR}." 
      echo "#####################################"
      return 12
@@ -237,24 +234,21 @@ set -a
 ##################################################
 # MAIN LOGIC STARTS HERE
 ##################################################
- apt-get install -y dos2unix
  export MY_SCRIPT="install.sh"
  export MY_HOME=`pwd`
  export SCRIPT_DIR="swat_scripts"
  export SERVER_NAME=`hostname` 
  export SERVER_IP=`ifconfig|grep inet|egrep -v "127.0.0.1|inet6"|awk '{print }'|head -1` 
  [[ -z "${SERVER_IP}" ]] && { export SERVER_IP="${SERVER_NAME}"; }
- sudo `which dos2unix` "${MY_HOME}"/"${SCRIPT_DIR}"/* "${MY_HOME}"/swat_install/* "${MY_HOME}"/swat_scripts/boot/swat.config  
- sudo chmod -R u+x "${MY_HOME}"/swat_scripts/*.sh "${MY_HOME}"/swat_install/*.sh
+ sudo chmod -R u+x ./swat_scripts/*.sh ./swat_install/*.sh
  export PATH=${PATH}:.
  [[ -d /home/swat ]] && { sudo userdel -f -r swat; }
  MY_USER=`swat_get_user_swat` 
- echo "MY_USER=${MY_USER}"
  myRC=$?
  if [[ ${myRC} -ne 0 ]];then
    {
      echo "#####################################"
-     echo "# install.sh running function        "
+     echo "# ${MY_SCRIPT} running function      "
      echo "# swat_get_user_swat failed.         "
      echo "# Aborting.                          "
      echo "# Script swat_get_user_swat.sh returned"
@@ -269,8 +263,8 @@ set -a
  if [[ ${myRC} -ne 0 ]];then
    {
      echo "#####################################"
-     echo "# install.sh running function        "
-     echo "# swat_set_dir_swat failed.         "
+     echo "# ${MY_SCRIPT} running function      "
+     echo "# swat_set_dir_swat failed.          "
      echo "# Aborting.                          "
      echo "# Script swat_set_dir_swat.sh returned"
      echo "# with RC=${myRC}                    " 
@@ -290,18 +284,20 @@ set -a
  fi
  if [[ ( -d "${MY_HOME}"/"${SCRIPT_DIR}" ) && ( -d "${MY_USER_DIR}" ) ]];then
    {
-     sudo `which dos2unix` "${MY_HOME}"/"${SCRIPT_DIR}"/*
+     `which dos2unix` "${MY_HOME}"/"${SCRIPT_DIR}"/*
      cd "${MY_HOME}"/"${SCRIPT_DIR}"
      sudo cp -R * "${MY_USER_DIR}"/.
      sudo chown -R root:"${MY_USER}" "${MY_USER_DIR}"
      sudo chmod -R 550 "${MY_USER_DIR}"
-     sudo `which dos2unix` "${MY_USER_DIR}"/* 
+     sudo `which dos2unix` "${MY_HOME}"/"${SCRIPT_DIR}"/* 
+     sudo `which dos2unix` "${MY_USER_DIR}/*" 
+     sudo `which dos2unix` /boot/swat.config
      sudo usermod -s /sbin/nologin "${MY_USER}"
    }
  else
    {
      echo "#####################################"
-     echo "# install.sh FATAL error!           #"
+     echo "# ${MY_SCRIPT} FATAL error!           #"
      echo "#-----------------------------------#"
      echo "# After running function             "
      echo "# swat_set_dir_swat failed to create "
@@ -316,7 +312,7 @@ set -a
      exit -1
    }
  fi
- #
+
  echo "##################################################"
  echo "# SWAT building Root Certificate Authority" 
  echo "##################################################"
@@ -373,7 +369,7 @@ set -a
  echo "#--------------------------------------------#"
  swat_format_usb
  myRC=$?
- if [[ ${myRC} -gt 4 ]];then
+ if [[ ${myRC} -ne 0 ]];then
    {
      echo "#####################################"
      echo "# function swat_format_usb.sh        "
@@ -400,7 +396,10 @@ set -a
  echo "##################################################"
 
 apt-get install -y debhelper dh-autoreconf autotools-dev autoconf-archive doxygen graphviz libasound2-dev libtool libjpeg-dev libqt4-dev libqt4-opengl-dev libudev-dev libx11-dev pkg-config udev make gcc git
-apt-get install -y libv4l-dev uvcdynctrl build-essential automake vim arp-scan msmtp msmtp-mta  mailutils mpack
+#
+#Askew20210620 - Add motion to next line
+#
+apt-get install -y libv4l-dev uvcdynctrl build-essential automake vim arp-scan msmtp msmtp-mta  mailutils mpack  motion
 myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
 [[ $((myCNT)) -eq 0 ]] && { echo "bcm2835-v4l2" >> /etc/modules; }
 myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
@@ -430,32 +429,9 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
    }
  fi
 
- cd /opt/src
- echo "##################################################"
- echo "# Install camera software.                        " 
- echo "##################################################"
- [[ -d ./RPi_Cam_Web_Interface ]] && { sudo rm -rf ./RPi_Cam_Web_Interface; }
-
- echo "#--------------------------------------------#"
- echo "# Download and prepare RPi_Cam_Web_Interface  "
- echo "#--------------------------------------------#"
- [[ ! -d ./RPi_Cam_Web_Interface ]] && { git clone https://github.com/silvanmelchior/RPi_Cam_Web_Interface.git; }
- cd ./RPi_Cam_Web_Interface
- sed -i 's/rpicamdir=\\"html\\"/rpicamdir=\\"cam\\"/' ./install.sh
- sed -i 's/webserver=\\"apache\\"/webserver=\\"nginx\\"/' ./install.sh
- sed -i 's/read -r rpicamdir/rpicamdir="cam"/' ./install.sh
- sed -i 's/read -r autostart/autostart=no/g' ./install.sh
-# sed -i 's/response=$?/response=0/' ./install.sh #Askew20210608 - chg from 1 to 0
- echo "chmod u+x /var/www/cam/macros/*.sh" >> ./install.sh
- echo "#--------------------------------------------#"
- echo "# Silent install RPi_Cam_Web_Interface        "
- echo "#--------------------------------------------#"
- #
- ./install.sh q
- echo ""
  echo "###############################################"
- echo "# SOFTWARE INSTALLS COMPLETED.                #"
- echo "# Starting POST INSTALL set up                #"
+ echo "# PENDING CAMERA SOFTWARE                     #"
+ echo "# Starting INTERNAL INSTALL set up            #"
  echo "###############################################"
  echo ""
  echo "#--------------------------------------------#"
@@ -492,7 +468,7 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
     }
  fi
  echo "#--------------------------------------------#"
- echo "# Configure camera settings.                  "
+ echo "# Configure mail settings.                   #"
  echo "#--------------------------------------------#"
  sudo echo -e "account\t\tdefault" > /etc/msmtprc
  sudo echo -e "auth\t\ton" >> /etc/msmtprc
@@ -503,23 +479,51 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
  sudo echo -e "port\t\t587" >> /etc/msmtprc
  sudo echo -e "from\t\t${MY_EMAIL_ADDRESS}" >> /etc/msmtprc
  sudo echo -e "user\t\t${MY_EMAIL_ADDRESS}" >> /etc/msmtprc
- sudo echo -e "password\t\t${MY_EMAIL_PW}"  >> /etc/msmtprc
+ sudo echo -e "password\t${MY_EMAIL_PW}"  >> /etc/msmtprc
  sudo echo -e "syslog\t\tLOG_MAIL" >> /etc/msmtprc
  sudo chown root:msmtp  /etc/msmtprc
  sudo chmod 660 /etc/msmtprc
- 
- #echo "#--------------------------------------------#"
- #echo "# Enabling motion - change /etc/default/motion"
- #echo "#--------------------------------------------#"
- #sudo sed -i 's/start_motion_daemon=no/start_motion_daemon=yes/g' /etc/default/motion
+ #
+ echo "#--------------------------------------------#"
+ echo "# Enabling motion - change /etc/default/motion"
+ echo "#--------------------------------------------#"
+ #sudo sed -i 's/start_motion_daemon=no/start_motion_daemon=yes' /etc/default/motion
+ sudo sed -i 's/rotate 0/rotate 270' /etc/motion/motion.conf
 
+ cd /opt/src
+ echo "##################################################"
+ echo "# Install camera software.                        " 
+ echo "##################################################"
+ [[ -d ./RPi_Cam_Web_Interface ]] && { sudo rm -rf ./RPi_Cam_Web_Interface; }
 
+ echo "#--------------------------------------------#"
+ echo "# Download and prepare RPi_Cam_Web_Interface  "
+ echo "#--------------------------------------------#"
+ [[ ! -d ./RPi_Cam_Web_Interface ]] && { git clone https://github.com/silvanmelchior/RPi_Cam_Web_Interface.git; }
+ cd ./RPi_Cam_Web_Interface
+ sed -i 's/rpicamdir=\\"html\\"/rpicamdir=\\"cam\\"/' ./install.sh
+ sed -i 's/webserver=\\"apache\\"/webserver=\\"nginx\\"/' ./install.sh
+ sed -i 's/read -r rpicamdir/rpicamdir="cam"/' ./install.sh
+ sed -i 's/read -r autostart/autostart=no/g' ./install.sh
+ sed -i 's/autostart=\\"yes\\"/autostart=\\"no\\"/g' ./install.sh
+ sed -i 's/autostart=yes/autostart=no/g' ./install.sh
+ sed -i 's/^# All rights reserved./chmod u+x \/var\/www\/cam\/macros\/\*.sh/g' ./install.sh
+ echo "sudo chmod u+x /var/www/cam/macros/*.sh" >> ./install.sh
+ echo "#--------------------------------------------#"
+ echo "# Silent install RPi_Cam_Web_Interface        "
+ echo "#--------------------------------------------#"
+ #
+ #
+exit #Askew20210620
+ #
+ sudo ./install.sh q
+ echo ""
  echo "#--------------------------------------------#"
  echo "# Setting /etc/raspimjpeg                    #"
  echo "#--------------------------------------------#"
  [[ ! -z "${MY_CAMERA_NAME}" ]] && { sudo sed -i 's/annotation RPi Cam/annotation '${MY_CAMERA_NAME}'/' /etc/raspimjpeg;  } 
- sudo sed -i 's/rotation 0/rotation 270/' /etc/raspimjpeg
- sudo sed -i 's/motion_detection false/motion_detection true/' /etc/raspimjpeg
+ sudo sed -i 's/rotation 0/rotation 270/g' /etc/raspimjpeg
+ sudo sed -i 's/motion_detection false/motion_detection true/g' /etc/raspimjpeg
  [[ ! -z "${MY_CAMERA_NAME}" ]] && { sudo sed -i 's/mycam/'${MY_CAMERA_NAME}'/' /opt/src/RPi_Cam_Web_Interface/www/config.php; }
  if [[ -f /etc/apache2/apache.conf ]]; then
    {
@@ -574,14 +578,14 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
          fi
    }
  fi
- echo "#--------------------------------------------#"
- echo "# Clean up and reboot.                        "
- echo "#--------------------------------------------#"
+# echo "#--------------------------------------------#"
+# echo "# Clean up and reboot.                        "
+# echo "#--------------------------------------------#"
 # echo "sudo rm -rf ${MY_HOME}/${SCRIPT_DIR} ${MY_HOME}/swat_install ${MY_HOME}/install.sh /home/${MY_USER}/swat_install /home/${MY_USER}/install.sh &"
 # sudo rm -rf "${MY_HOME}"/"${SCRIPT_DIR}" "${MY_HOME}"/swat_install "${MY_HOME}"/install.sh /home/"${MY_USER}"/swat_install /home/"${MY_USER}"/install.sh &
- echo "###############################################"
- echo "# COMPLETED Install and Clean up. Recapping   #"
- echo "# SSL CA and CERT builds:                     #"
- echo "# See /var/log/swat.log for details on SSL    #"
- echo "###############################################"
-sudo systemctl reboot
+# echo "###############################################"
+# echo "# COMPLETED Install and Clean up. Recapping   #"
+# echo "# SSL CA and CERT builds:                     #"
+# echo "# See /var/log/swat.log for details on SSL    #"
+# echo "###############################################"
+#sudo systemctl reboot
