@@ -483,12 +483,18 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
  sudo echo -e "syslog\t\tLOG_MAIL" >> /etc/msmtprc
  sudo chown root:msmtp  /etc/msmtprc
  sudo chmod 660 /etc/msmtprc
- #
+ 
+ echo "#--------------------------------------------#"
+ echo "# Test email to verify mail is working..     #"
+ echo "# ==> Sending to ${MY_EMAIL_ADDRESS}         #"
+ echo "#--------------------------------------------#"
+ sudo echo "Email is working."|mail -s "Your test email from ${MY_SCRIPT}" "${MY_EMAIL_ADDRESS}"
+  
  echo "#--------------------------------------------#"
  echo "# Enabling motion - change /etc/default/motion"
  echo "#--------------------------------------------#"
  sudo sed -i 's/start_motion_daemon=no/start_motion_daemon=yes/g' /etc/default/motion
- sudo sed -i 's/rotate 0/rotate 270/g' /etc/motion/motion.conf
+ sudo sed -i 's/rotate 0/rotate 180/g' /etc/motion/motion.conf
 
  cd /opt/src
  echo "##################################################"
@@ -518,7 +524,7 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
  echo "# Setting /etc/raspimjpeg                    #"
  echo "#--------------------------------------------#"
  [[ ! -z "${MY_CAMERA_NAME}" ]] && { sudo sed -i 's/annotation RPi Cam/annotation '${MY_CAMERA_NAME}'/' /etc/raspimjpeg;  } 
- sudo sed -i 's/rotation 0/rotation 270/g' /etc/raspimjpeg
+ sudo sed -i 's/rotation 0/rotation 180/g' /etc/raspimjpeg
  sudo sed -i 's/motion_detection false/motion_detection true/g' /etc/raspimjpeg
  [[ ! -z "${MY_CAMERA_NAME}" ]] && { sudo sed -i 's/mycam/'${MY_CAMERA_NAME}'/' /opt/src/RPi_Cam_Web_Interface/www/config.php; }
  if [[ -f /etc/apache2/apache.conf ]]; then
@@ -574,14 +580,14 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
          fi
    }
  fi
-# echo "#--------------------------------------------#"
-# echo "# Clean up and reboot.                        "
-# echo "#--------------------------------------------#"
+ echo "#--------------------------------------------#"
+ echo "# Clean up and reboot.                        "
+ echo "#--------------------------------------------#"
 # echo "sudo rm -rf ${MY_HOME}/${SCRIPT_DIR} ${MY_HOME}/swat_install ${MY_HOME}/install.sh /home/${MY_USER}/swat_install /home/${MY_USER}/install.sh &"
 # sudo rm -rf "${MY_HOME}"/"${SCRIPT_DIR}" "${MY_HOME}"/swat_install "${MY_HOME}"/install.sh /home/"${MY_USER}"/swat_install /home/"${MY_USER}"/install.sh &
-# echo "###############################################"
-# echo "# COMPLETED Install and Clean up. Recapping   #"
-# echo "# SSL CA and CERT builds:                     #"
-# echo "# See /var/log/swat.log for details on SSL    #"
-# echo "###############################################"
-#sudo systemctl reboot
+ echo "###############################################"
+ echo "# COMPLETED Install and Clean up. Recapping   #"
+ echo "# SSL CA and CERT builds:                     #"
+ echo "# See /var/log/swat.log for details on SSL    #"
+ echo "###############################################"
+ sudo systemctl reboot
