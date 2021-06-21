@@ -487,8 +487,8 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
  echo "#--------------------------------------------#"
  echo "# Enabling motion - change /etc/default/motion"
  echo "#--------------------------------------------#"
- #sudo sed -i 's/start_motion_daemon=no/start_motion_daemon=yes' /etc/default/motion
- sudo sed -i 's/rotate 0/rotate 270' /etc/motion/motion.conf
+ sudo sed -i 's/start_motion_daemon=no/start_motion_daemon=yes/g' /etc/default/motion
+ sudo sed -i 's/rotate 0/rotate 270/g' /etc/motion/motion.conf
 
  cd /opt/src
  echo "##################################################"
@@ -504,17 +504,13 @@ myCNT=`sudo grep bcm2835-v4l2 /etc/modules|wc -l`
  sed -i 's/rpicamdir=\\"html\\"/rpicamdir=\\"cam\\"/' ./install.sh
  sed -i 's/webserver=\\"apache\\"/webserver=\\"nginx\\"/' ./install.sh
  sed -i 's/read -r rpicamdir/rpicamdir="cam"/' ./install.sh
- sed -i 's/read -r autostart/autostart=no/g' ./install.sh
- sed -i 's/autostart=\\"yes\\"/autostart=\\"no\\"/g' ./install.sh
- sed -i 's/autostart=yes/autostart=no/g' ./install.sh
+ sed -i 's/read -r autostart/autostart=yes/g' ./install.sh
+ sed -i 's/autostart=no/autostart=yes/g' ./install.sh
  sed -i 's/^# All rights reserved./chmod u+x \/var\/www\/cam\/macros\/\*.sh/g' ./install.sh
  echo "sudo chmod u+x /var/www/cam/macros/*.sh" >> ./install.sh
  echo "#--------------------------------------------#"
  echo "# Silent install RPi_Cam_Web_Interface        "
  echo "#--------------------------------------------#"
- #
- #
-exit #Askew20210620
  #
  sudo ./install.sh q
  echo ""
