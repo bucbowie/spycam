@@ -34,4 +34,4 @@
 7. Finally, change directory back to $HOME, where the install.sh script is located.
 8. Command line: sudo dos2unix install.sh
 9. To install solution: sudo ./install.sh 
-10. Go for coffee and return in 44 minutes. Open web browser to http://your-pi-I.P/cam and see the video camera. If you set up the configurations correctly from Step 4, then the camera will turn off in 1 minute. If you want to test your camera, simply turn off the wireless function on your cell phone and wait 4 minutes. The camera should go live after not seeing your cell phone. When you reenable the wireless function on your cell phone, within a minute the camera should stop capturing video.
+10. Go for coffee and return in 44 minutes. Open web browser to http://your-pi-I.P and see the video camera. If you set up the configurations correctly from Step 4, then the camera will turn off in 1 minute. If you want to test your camera, simply turn off the wireless function on your cell phone and wait 4 minutes. The camera should go live after not seeing your cell phone. When you reenable the wireless function on your cell phone, within a minute the camera should stop capturing video.
