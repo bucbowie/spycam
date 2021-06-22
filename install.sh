@@ -82,6 +82,11 @@ set -a
 #------------------------------------------#
  function swat_format_usb()  {
 #------------------------------------------#
+ echo "##################################################"
+ echo "# Entering swat_format_usb                       #"
+ echo "##################################################"
+ ls -lart  "${SCRIPT_DIR}"/swat_format_usb.sh
+
  if [[ `sudo mount|grep '/media/cam'|grep vfat|wc -l` -gt 0 ]];then
    {
 	     echo "#####################################"
@@ -108,9 +113,9 @@ set -a
  if [[ -d /sys/block/sda ]];then
    {
     [[ ! -d /media/cam ]] && { sudo mkdir /media/cam; sudo chmod 777 /media/cam; }
-    if [[ -x ./swat_format_usb.sh ]];then
+    if [[ -x "${SCRIPT_DIR}"/swat_format_usb.sh ]];then
        {
-	  sudo ./swat_format_usb.sh
+	  sudo "${SCRIPT_DIR}"/swat_format_usb.sh
 	  myRC=$?
 	  if [[ ${myRC} -eq 0 ]];then
 	     {
